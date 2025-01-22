@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     bool enteredArea;
     GameObject enteredObject;
 
+
     private Vector2 MoveDir 
     { 
         get { return moveDir; } 
