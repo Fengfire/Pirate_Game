@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target; // Takip edilecek obje (geminin Transform'u)
-    public Vector3 offset;   // Kameranýn gemiye göre uzaklýðý
+    [SerializeField] Transform target;
+    [SerializeField] Vector3 offset;
 
     void Start()
     {
-        // Kamera baþlangýç pozisyonunu ayarla
         if (target != null)
         {
             transform.position = target.position + offset;
@@ -16,7 +15,6 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        // Kameranýn pozisyonunu sürekli güncelle
         if (target != null)
         {
             transform.position = target.position + offset;

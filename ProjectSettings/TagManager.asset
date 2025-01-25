@@ -44,11 +44,23 @@ TagManager:
   - name: Sea
     uniqueID: 2870900629
     locked: 0
+  - name: ShallowSea
+    uniqueID: 4191195987
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: PlantsBack
+    uniqueID: 2360599365
+    locked: 0
   - name: Player
     uniqueID: 2792828505
+    locked: 0
+  - name: PlantsFront
+    uniqueID: 2284624343
+    locked: 0
+  - name: Buildings
+    uniqueID: 3242113135
     locked: 0
   m_RenderingLayers:
   - Default

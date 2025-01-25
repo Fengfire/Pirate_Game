@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
     enum FaceDirection { left, right }
     FaceDirection faceDir;
+    FaceDirection pastFaceDir;
 
     InputMaster inputMaster;
     Rigidbody2D rb;
@@ -14,6 +16,8 @@ public class PlayerController : MonoBehaviour
     bool enteredArea;
     GameObject enteredObject;
 
+    [SerializeField] UnityEvent Turn;
+    Interactable interactable;
 
     private Vector2 MoveDir 
     { 
@@ -34,6 +38,11 @@ public class PlayerController : MonoBehaviour
                 }
                 body.GetComponent<SpriteRenderer>().flipX = (faceDir == FaceDirection.right);
                 body.GetComponent<Animator>().SetBool("Walk", true);
+                if (pastFaceDir != faceDir)
+                {
+                    pastFaceDir = faceDir;
+                    Turn.Invoke();
+                }
             }
             else
             {
@@ -55,11 +64,7 @@ public class PlayerController : MonoBehaviour
         inputMaster.Player.Movement.performed += context => SetDirection(context.ReadValue<Vector2>());
         inputMaster.Player.Movement.canceled += context => SetDirection(context.ReadValue<Vector2>());
         inputMaster.Player.Interaction.performed += _ => PressedE();
-    }
-
-    private void Start()
-    {
-
+        inputMaster.Player.Attack.performed += _ => PressedLeftClick();
     }
 
     void FixedUpdate()
@@ -77,6 +82,10 @@ public class PlayerController : MonoBehaviour
             enteredArea = true;
             enteredObject = collision.gameObject;
         }
+        if (collision.GetComponent<Interactable>() != null)
+        {
+            interactable = collision.GetComponent<Interactable>();
+        }
     }
     void OnTriggerExit2D(Collider2D collision)
     {
@@ -84,6 +93,10 @@ public class PlayerController : MonoBehaviour
         {
             enteredArea = false;
             enteredObject = null;
+        }
+        if (collision.GetComponent<Interactable>() != null)
+        {
+            interactable = null;
         }
     }
 
@@ -98,6 +111,15 @@ public class PlayerController : MonoBehaviour
         {
             enteredObject.GetComponent<EntryArea>().EnterShip();
         }
+        if (interactable != null)
+        {
+            interactable.Interact();
+        }
+    }
+
+    void PressedLeftClick()
+    {
+        body.GetComponent<Animator>().SetTrigger("Attack");
     }
 
     private void OnDisable()
